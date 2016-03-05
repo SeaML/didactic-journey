@@ -9,11 +9,64 @@
 --Problem Numb: #4
 --Date Added: 03/05/2016
 
-SELECT name + '(' + Substring(occupation, 1, 1) + ')'
-FROM occupations
-ORDER BY name asc
+SELECT NAME + '(' + Substring(occupation, 1, 1) + ')'
+FROM   occupations
+ORDER  BY NAME ASC
 
-SELECT 'There are total ' + Cast(Count(occupation) as nvarchar) + ' ' + Lower(occupation) +'s.'
-FROM occupations
-GROUP BY occupation
-ORDER BY Count(occupation) asc, occupation asc
+SELECT 'There are total '
+       + Cast(Count(occupation) AS nvarchar) + ' '
+       + Lower(occupation) + 's.'
+FROM   occupations
+GROUP  BY occupation
+ORDER  BY Count(occupation) ASC,
+          occupation ASC 
+
+
+--Problem Name: The Report
+--Problem Numb: #6
+--Date Added: 03/05/2016
+
+SELECT name_nulled,
+       grade,
+       marks
+FROM  (SELECT CASE
+                WHEN Cast([marks]/10 AS int) + 1 < 8 THEN NULL
+                ELSE[name]
+              END AS 'name_nulled',
+              CASE
+                WHEN marks = 100 THEN 10
+                ELSE Cast([marks]/10 AS int) + 1
+              END AS 'grade',
+              [marks]
+       FROM   students) x
+ORDER  BY grade DESC,
+          CASE
+            WHEN name_nulled IS NOT NULL THEN name_nulled
+          END ASC,
+          CASE
+            WHEN name_nulled IS NULL THEN marks
+          END ASC; 
+
+--Problem Name: Binary Search Tree
+--Problem Numb: #7
+--Date Added: 03/05/2016
+
+SELECT n,
+       'Root' AS 'Description'
+FROM   bst
+WHERE  p IS NULL
+UNION
+SELECT n,
+       'Inner' AS 'Description'
+FROM   bst
+WHERE  n IN (SELECT DISTINCT p
+             FROM   bst
+             WHERE  p IS NOT NULL)
+       AND p IS NOT NULL
+UNION
+SELECT n,
+       'Leaf' AS 'Description'
+FROM   bst
+WHERE  n NOT IN (SELECT DISTINCT p
+                 FROM   bst
+                 WHERE  p IS NOT NULL) 
