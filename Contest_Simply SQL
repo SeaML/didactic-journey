@@ -1,0 +1,19 @@
+--HackerRank
+--Contest: Simply SQL
+
+--Problem Name: 
+--Problem Numb: #1
+--Date Added: 
+
+--Problem Name: The PADS
+--Problem Numb: #4
+--Date Added: 03/05/2016
+
+SELECT name + '(' + Substring(occupation, 1, 1) + ')'
+FROM occupations
+ORDER BY name asc
+
+SELECT 'There are total ' + Cast(Count(occupation) as nvarchar) + ' ' + Lower(occupation) +'s.'
+FROM occupations
+GROUP BY occupation
+ORDER BY Count(occupation) asc, occupation asc
