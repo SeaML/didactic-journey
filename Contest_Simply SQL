@@ -21,6 +21,57 @@ GROUP  BY occupation
 ORDER  BY Count(occupation) ASC,
           occupation ASC 
 
+--Problem Name: Occupations
+--Problem Numb: #5
+--Date Added: 03/05/2016
+
+; WITH master_reference
+     AS (SELECT DISTINCT Row_number()
+                           OVER (
+                             partition BY occupation
+                             ORDER BY NAME ASC) AS 'RowNumber'
+         FROM   occupations),
+     doctors
+     AS (SELECT Row_number()
+                  OVER (
+                    ORDER BY NAME ASC) AS 'RowNumber',
+                NAME
+         FROM   occupations
+         WHERE  occupation = 'Doctor'),
+     professors
+     AS (SELECT Row_number()
+                  OVER (
+                    ORDER BY NAME ASC) AS 'RowNumber',
+                NAME
+         FROM   occupations
+         WHERE  occupation = 'Professor'),
+     singers
+     AS (SELECT Row_number()
+                  OVER (
+                    ORDER BY NAME ASC) AS 'RowNumber',
+                NAME
+         FROM   occupations
+         WHERE  occupation = 'Singer'),
+     actors
+     AS (SELECT Row_number()
+                  OVER (
+                    ORDER BY NAME ASC) AS 'RowNumber',
+                NAME
+         FROM   occupations
+         WHERE  occupation = 'Actor')
+SELECT doctors.NAME,
+       professors.NAME,
+       singers.NAME,
+       actors.NAME
+FROM   master_reference
+       LEFT JOIN doctors
+              ON doctors.rownumber = master_reference.rownumber
+       LEFT JOIN professors
+              ON professors.rownumber = master_reference.rownumber
+       LEFT JOIN singers
+              ON singers.rownumber = master_reference.rownumber
+       LEFT JOIN actors
+              ON actors.rownumber = master_reference.rownumber 
 
 --Problem Name: The Report
 --Problem Numb: #6
